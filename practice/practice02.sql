@@ -56,4 +56,26 @@ FROM
 	ORDER BY MAX(salary)-MIN(salary) DESC)
 WHERE ROWNUM=1;
 
+-- 문제7 업무별로 최고임금, 최저임금, 최고임금과 최저임금의 가장 큰 차이 projection
+SELECT * 
+FROM 
+	(SELECT job_id,  MAX(salary) 최고임금, MIN(salary) 최저임금,
+			MAX(salary)-MIN(salary) "최고임금-최저임금"
+	FROM employees
+	GROUP BY job_id
+	ORDER BY "최고임금-최저임금" DESC)
+WHERE ROWNUM=1;
+
+-- 문제7 업무명, 최고임금, 최저임금, 최고임금-최저임금을 join해서 
+SELECT * 
+FROM 
+	(SELECT j.job_title 업무명, MAX(e.salary) 최고임금, MIN(e.salary) 최저임금,
+			MAX(e.salary)-MIN(e.salary) "최고임금-최저임금"
+	FROM employees e, jobs j
+	WHERE e.job_id = j.job_id
+	GROUP BY j.job_title
+	ORDER BY "최고임금-최저임금" DESC)
+WHERE ROWNUM=1;
+
+
 
