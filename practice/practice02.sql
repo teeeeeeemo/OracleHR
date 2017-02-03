@@ -77,5 +77,33 @@ FROM
 	ORDER BY "최고임금-최저임금" DESC)
 WHERE ROWNUM=1;
 
+-- *****sub query 문제7 다시해보기 
+-- 문제7 : 업무별로 최고임금과 최저임금의 차이와 가장 큰 차이 ? 그 업무 ? 
+-- >> 업무명 | 최고임금-최저임금
 
+-- step 1 : job_id, maxSalary, minSalary, diffSalary 구하기 
+SELECT job_id,  MAX(salary) max, MIN(salary) min,
+			MAX(salary)-MIN(salary) diff_sal
+	FROM employees
+	GROUP BY job_id;
+
+-- step 2 : diffSalary중 MAX value 구하기
+SELECT MAX(diff_sal)
+FROM (SELECT job_id,  MAX(salary) max, MIN(salary) min,
+			MAX(salary)-MIN(salary) diff_sal
+	FROM employees
+	GROUP BY job_id);
+
+-- step3 : 완성
+SELECT j.job_title 업무명, a.max_sal 최고임금, a.min_sal 최저임금, a.diff_sal "최저임금-최저임금"
+FROM jobs j, (SELECT job_id, MAX(salary) max_sal, MIN(salary) min_sal, MAX(salary)-MIN(salary) diff_sal
+	FROM employees 
+	GROUP BY job_id) a
+WHERE j.job_id = a.job_id
+	AND a.diff_sal = ( SELECT MAX(diff_sal)
+			FROM (SELECT job_id,  
+			MAX(salary)-MIN(salary) diff_sal
+			FROM employees
+	GROUP BY job_id)
+	);
 
