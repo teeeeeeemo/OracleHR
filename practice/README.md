@@ -1,4 +1,4 @@
-<pre>
+<pre style='background-color:#fff'>
 <h3> SELECT 기본 <br>
 ORACLE HR 계정 </h3>
 
